@@ -222,7 +222,7 @@ h1 i{font-style:normal;color:var(--hot)}
     <div class="shot"><img id="cshot" src="" alt="" /><div class="tag" id="ctag"></div></div>
     <div class="body">
       <img id="cpor" src="" alt="" />
-      <div><h3 id="cname"></h3><p id="cline"></p><a class="visit" id="cvisit" href="#" target="_blank" rel="noopener" hidden>Visit his place &#8599;</a></div>
+      <div><h3 id="cname"></h3><p id="cline"></p><a class="visit" id="cvisit" href="#">Visit his place &#8599;</a></div>
       <div class="cnav"><button id="cprev" aria-label="Previous">&#8249;</button><button id="cnext" aria-label="Next">&#8250;</button><button id="cx" aria-label="Close">&#10005;</button></div>
     </div>
   </div>
@@ -250,7 +250,7 @@ h1 i{font-style:normal;color:var(--hot)}
 
   /* the citizens: name, district, head, where they were seen, what they would say */
   var C = [
-    ['tesloon',  'Tesloon',  'Motor District', .50, .64, 'Seen at the charger on level minus two', 'He is the car. <b>The car is late.</b>', 'https://tesloon.vercel.app'],
+    ['tesloon',  'Tesloon',  'Motor District', .50, .64, 'Seen at the charger on level minus two', 'He is the car. <b>The car is late.</b>'],
     ['gigachip', 'Gigachip', 'Tech Quarter',   .76, .26, 'Seen in the server room, running hot',   'Sold out everywhere. <b>Never in stock, always in demand.</b>'],
     ['iphony',   'Iphony',   'Tech Quarter',   .82, .35, 'Seen alone on the keynote stage',        'One more thing, every year. <b>It is the same thing.</b>'],
     ['bigburg',  'Bigburg',  'Fast Food Row',  .30, .44, 'Seen behind the counter after close',    'Billions served. <b>None of them him.</b>'],
@@ -386,7 +386,7 @@ h1 i{font-style:normal;color:var(--hot)}
     document.getElementById('ctag').textContent = c[2] + ' · ' + c[5];
     document.getElementById('cname').innerHTML = c[1] + '<small>' + c[2] + ' · citizen ' + (cur + 1) + ' of 12</small>';
     document.getElementById('cline').innerHTML = c[6];
-    var vis = document.getElementById('cvisit'); if(c[7]){ vis.href = c[7]; vis.hidden = false; } else vis.hidden = true;
+    var vis = document.getElementById('cvisit'); vis.href = c[0] + '/'; vis.hidden = false;
     card.classList.add('on');
     if(!seen[cur]){ seen[cur] = 1; nSeen++; found.textContent = nSeen; pins[cur].el.classList.add('seen'); pins[cur].li.classList.add('seen'); }
   }

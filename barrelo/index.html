@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="../config.js"></script>
+<script src="../citizens.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Barrelo · Stocks Robinhood City</title>
+<meta name="description" content="Barrelo, resident of Energy Docks, Stocks Robinhood City. Goes negative once a decade. Comes back." />
+<link rel="icon" type="image/png" href="../assets/favicon.png" />
+<link rel="apple-touch-icon" href="../assets/apple-icon.png" />
+<link rel="preload" as="image" href="../assets/barrelo/1.webp" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+:root{--ink:#070b12;--deep:#0b1119;--paper:#e8e6df;--acc:#ff8a2e;--dim:#6b7484;--line:rgba(232,230,223,.12);--disp:"Barlow Condensed","Arial Narrow",sans-serif;--mono:"Space Mono","Courier New",monospace;--pad:clamp(16px,3vw,40px)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:13px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.grain{position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.07;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
+.hud{position:fixed;z-index:40;display:flex;gap:6px;align-items:center}
+.tl{left:var(--pad);top:var(--pad)} .tr{right:var(--pad);top:var(--pad)}
+.key{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:36px;padding:0 14px;font-family:var(--disp);font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper);background:rgba(7,11,18,.7);border:1px solid rgba(232,230,223,.5);transition:background .15s,border-color .15s,transform .12s}
+.key:hover{border-color:var(--paper);background:rgba(232,230,223,.1);transform:translateY(-1px)}
+.key.buy{background:var(--acc);border-color:var(--acc);color:#0a0c10}
+.key img{width:15px;height:15px;object-fit:contain}
+.key img.av{width:22px;height:22px;object-fit:contain}
+.hero{position:relative;min-height:100svh;display:grid;align-items:end;overflow:hidden;background:var(--ink)}
+.hero .shot{position:absolute;inset:0;overflow:hidden}
+.hero .shot img{width:100%;height:100%;object-fit:cover;transform:scale(1.06);animation:push 24s ease-out forwards;filter:saturate(.9) contrast(1.05)}
+@keyframes push{to{transform:scale(1.15) translateY(-1.5%)}}
+.hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,11,18,.3),rgba(7,11,18,0) 30%,rgba(7,11,18,.2) 60%,rgba(7,11,18,.97))}
+.wrap{position:relative;z-index:2;width:min(1180px,100%);margin:0 auto;padding:0 var(--pad)}
+.hero .wrap{padding-bottom:calc(var(--pad) + 6px)}
+.eyebrow{font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--acc)}
+h1{font-family:var(--disp);font-weight:800;font-size:clamp(72px,16vw,240px);line-height:.84;letter-spacing:.005em;text-transform:uppercase;color:var(--paper);text-shadow:0 14px 60px rgba(0,0,0,.85);margin-top:8px}
+.lede{margin-top:14px;max-width:48ch;font-size:14px;color:rgba(232,230,223,.85)}
+.lede b{color:var(--paper)}
+.file{padding:clamp(48px,8vw,110px) 0 clamp(30px,5vw,60px)}
+.card{display:grid;grid-template-columns:minmax(260px,.9fr) minmax(0,1.1fr);gap:clamp(18px,3vw,44px);align-items:start}
+.idc{background:var(--deep);border:1px solid rgba(232,230,223,.22);box-shadow:0 30px 70px rgba(0,0,0,.6);padding:clamp(16px,2.4vw,26px);position:relative;overflow:hidden;cursor:pointer}
+.idc:before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:var(--acc)}
+.idc .top{display:flex;gap:14px;align-items:center;margin-top:6px}
+.idc .top img{width:96px;height:96px;object-fit:contain;background:#05080d;border:1px solid var(--line);padding:6px}
+.idc .top b{font-family:var(--disp);font-weight:800;font-size:34px;line-height:.9;text-transform:uppercase;letter-spacing:.02em}
+.idc .top b small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--acc);margin-top:6px;font-weight:400}
+.idc .f{margin-top:12px;border-top:1px dashed rgba(232,230,223,.2);padding-top:8px;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim)}
+.idc .f b{display:block;font-size:13px;letter-spacing:.04em;text-transform:none;color:var(--paper);margin-top:3px;font-weight:400;word-break:break-all}
+.idc .f.ca b{color:var(--acc);font-weight:700}
+.idc .bar{margin-top:14px;height:30px;background:repeating-linear-gradient(90deg,#e8e6df 0 2px,transparent 2px 4px,#e8e6df 4px 5px,transparent 5px 9px,#e8e6df 9px 12px,transparent 12px 14px);opacity:.8}
+.idc .cp{margin-top:8px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);text-align:center}
+.side h2{font-family:var(--disp);font-weight:800;font-size:clamp(34px,5.4vw,74px);line-height:.92;letter-spacing:.01em;text-transform:uppercase}
+.side h2 i{font-style:normal;color:var(--acc)}
+.lore{margin-top:14px;display:grid;gap:8px;max-width:52ch}
+.lore p{color:rgba(232,230,223,.85);padding-left:14px;border-left:2px solid var(--acc)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.acts .key{height:44px;padding:0 20px}
+.seen{padding:clamp(30px,5vw,60px) 0}
+.head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.head h2{font-family:var(--disp);font-weight:800;font-size:clamp(30px,5vw,64px);line-height:.9;letter-spacing:.02em;text-transform:uppercase}
+.head span{font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.grid button{position:relative;display:block;padding:0;overflow:hidden;background:#0b0d10;border:1px solid var(--line);text-align:left}
+.grid img{width:100%;aspect-ratio:16/9;object-fit:cover;filter:saturate(.85) brightness(.88);transition:transform .5s cubic-bezier(.2,.8,.24,1),filter .3s}
+.grid button:hover img{transform:scale(1.06);filter:none}
+.grid b{position:absolute;left:0;right:0;bottom:0;padding:26px 10px 8px;font-size:11px;letter-spacing:.04em;color:var(--paper);background:linear-gradient(180deg,rgba(7,11,18,0),rgba(7,11,18,.95));opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;font-weight:400}
+.grid button:hover b{opacity:1;transform:none}
+.nb{padding:clamp(30px,5vw,60px) 0 clamp(50px,8vw,100px);border-top:1px solid var(--line)}
+.nb .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.nb a{display:grid;justify-items:center;gap:6px;width:92px;padding:10px 6px;border:1px solid var(--line);background:var(--deep);transition:border-color .15s,transform .12s}
+.nb a:hover{border-color:var(--paper);transform:translateY(-2px)}
+.nb a img{width:48px;height:48px;object-fit:contain}
+.nb a span{font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+.pn{display:flex;justify-content:space-between;gap:12px;margin-top:22px;font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:.12em;text-transform:uppercase}
+.pn a{color:var(--dim);transition:color .15s} .pn a:hover{color:var(--paper)} .pn a i{font-style:normal;color:var(--acc)}
+.end{border-top:1px solid var(--line);padding:clamp(26px,4vw,46px) 0 calc(var(--pad) + 10px);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:10px;letter-spacing:.24px;text-transform:uppercase;color:#4d5563}
+.end a{color:var(--paper)}
+.lb{position:fixed;inset:0;z-index:60;display:none;place-items:center;padding:var(--pad);background:rgba(4,6,10,.95)}
+.lb.on{display:grid}
+.lbin{width:min(1100px,100%);display:grid;gap:10px}
+.lb img{width:100%;max-height:76svh;object-fit:contain;border:1px solid rgba(232,230,223,.3)}
+.lbbar{display:flex;align-items:center;justify-content:space-between;gap:14px;font-size:12px;color:var(--dim)}
+.lbbar .cap{color:rgba(232,230,223,.9)}
+.lbnav{display:flex;gap:6px}
+.lbnav button{border:1px solid rgba(232,230,223,.45);width:34px;height:30px;font-family:var(--disp);font-size:16px;line-height:1}
+.lbnav button:hover{background:rgba(232,230,223,.12)}
+@media (max-width:900px){.card{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.grid b{opacity:1;transform:none;font-size:10px}.tl span,.tr .key.buy span{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition-duration:.01ms !important}}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<a class="hud tl key" href="../"><img class="av" src="../assets/h-barrelo.webp" alt="" /><span>Stocks Robinhood City</span></a>
+<nav class="hud tr">
+  <a class="key buy" id="buy" href="https://www.ponsfamily.com/launchpad"><span>Buy</span><img src="../assets/pons-mark.png" alt="" /></a>
+  <a class="key" id="xl" href="https://x.com" aria-label="X"><img src="../assets/ic-x.svg" alt="X" /></a>
+</nav>
+<header class="hero">
+  <div class="shot"><img src="../assets/barrelo/1.webp" alt="Barrelo at the tanks at the docks" /></div>
+  <div class="veil"></div>
+  <div class="wrap">
+    <div class="eyebrow">Energy Docks &#183; Stocks Robinhood City &#183; resident 10</div>
+    <h1>Barrelo</h1>
+    <p class="lede">Goes negative once a decade. <b>Comes back.</b></p>
+  </div>
+</header>
+<main class="wrap">
+  <section class="file">
+    <div class="card">
+      <div class="idc" id="idc" title="Copy contract">
+        <div class="top"><img src="../assets/h-barrelo.webp" alt="" /><b>Barrelo<small>Resident file &#183; 10 / 12</small></b></div>
+        <div class="f">District<b>Energy Docks</b></div>
+        <div class="f">Head<b>an oil barrel</b></div>
+        <div class="f">Body<b>work jumpsuit</b></div>
+        <div class="f">Last seen<b>the tanks at the docks</b></div>
+        <div class="f ca">Contract &#183; Robinhood Chain &#183; Pons<b id="ca">soon</b></div>
+        <div class="bar"></div>
+        <div class="cp" id="cp">Tap the file to copy</div>
+      </div>
+      <div class="side">
+        <h2>What the city <i>knows</i></h2>
+        <div class="lore"><p>He has been declared dead four times and paid dividends every time.</p><p>The docks smell of him and he does not mind.</p><p>He went negative once. Someone paid to take him.</p></div>
+        <div class="acts">
+          <a class="key buy" id="buy2" href="https://www.ponsfamily.com/launchpad">Buy on Pons<img src="../assets/pons-mark.png" alt="" /></a>
+          <a class="key" id="dex" href="https://dexscreener.com/robinhood">Chart<img src="../assets/ic-dex.svg" alt="" /></a>
+          <a class="key" id="xl2" href="https://x.com" aria-label="X"><img src="../assets/ic-x.svg" alt="X" /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="seen">
+    <div class="head"><h2>Sightings</h2><span>6 of them &#183; same head &#183; never looking up</span></div>
+    <div class="grid" id="grid"><button data-i="0" aria-label="Among the tanks at the docks"><img src="../assets/barrelo/t1.webp" alt="Barrelo among the tanks at the docks" loading="lazy" /><b>Among the tanks at the docks</b></button><button data-i="1" aria-label="At the pump, filling nothing"><img src="../assets/barrelo/t2.webp" alt="Barrelo at the pump, filling nothing" loading="lazy" /><b>At the pump, filling nothing</b></button><button data-i="2" aria-label="In the truck stop diner, coffee black"><img src="../assets/barrelo/t3.webp" alt="Barrelo in the truck stop diner, coffee black" loading="lazy" /><b>In the truck stop diner, coffee black</b></button><button data-i="3" aria-label="The tanks, from the other side"><img src="../assets/barrelo/t4.webp" alt="Barrelo the tanks, from the other side" loading="lazy" /><b>The tanks, from the other side</b></button><button data-i="4" aria-label="Rain on the oil, rainbow on the puddle"><img src="../assets/barrelo/t5.webp" alt="Barrelo rain on the oil, rainbow on the puddle" loading="lazy" /><b>Rain on the oil, rainbow on the puddle</b></button><button data-i="5" aria-label="Shift over, still there"><img src="../assets/barrelo/t6.webp" alt="Barrelo shift over, still there" loading="lazy" /><b>Shift over, still there</b></button></div>
+  </section>
+  <section class="nb">
+    <div class="head"><h2>Neighbours</h2><span>Eleven others &#183; same rain</span></div>
+    <div class="row"><a href="../tesloon/" title="Tesloon · Motor District"><img src="../assets/h-tesloon.webp" alt="Tesloon" /><span>Tesloon</span></a><a href="../gigachip/" title="Gigachip · Tech Quarter"><img src="../assets/h-gigachip.webp" alt="Gigachip" /><span>Gigachip</span></a><a href="../iphony/" title="Iphony · Tech Quarter"><img src="../assets/h-iphony.webp" alt="Iphony" /><span>Iphony</span></a><a href="../bigburg/" title="Bigburg · Fast Food Row"><img src="../assets/h-bigburg.webp" alt="Bigburg" /><span>Bigburg</span></a><a href="../latteo/" title="Latteo · Fast Food Row"><img src="../assets/h-latteo.webp" alt="Latteo" /><span>Latteo</span></a><a href="../sneako/" title="Sneako · Sneaker Street"><img src="../assets/h-sneako.webp" alt="Sneako" /><span>Sneako</span></a><a href="../colaman/" title="Colaman · Fast Food Row"><img src="../assets/h-colaman.webp" alt="Colaman" /><span>Colaman</span></a><a href="../rocketo/" title="Rocketo · Rocket Park"><img src="../assets/h-rocketo.webp" alt="Rocketo" /><span>Rocketo</span></a><a href="../pharmo/" title="Pharmo · Pharma Hills"><img src="../assets/h-pharmo.webp" alt="Pharmo" /><span>Pharmo</span></a><a href="../coiney/" title="Coiney · Bank Square"><img src="../assets/h-coiney.webp" alt="Coiney" /><span>Coiney</span></a><a href="../retailo/" title="Retailo · Retail Mall"><img src="../assets/h-retailo.webp" alt="Retailo" /><span>Retailo</span></a></div>
+    <div class="pn"><a href="../pharmo/"><i>&#8249;</i> Pharmo</a><a href="../">Back to the map</a><a href="../coiney/">Coiney <i>&#8250;</i></a></div>
+  </section>
+  <div class="end"><span>Barrelo &#183; Energy Docks</span><a href="../">Stocks Robinhood City</a><span>Robinhood Chain &#183; Pons</span></div>
+</main>
+<div class="lb" id="lb"><div class="lbin"><img id="lbimg" src="" alt="" /><div class="lbbar"><span class="cap" id="lbcap"></span><span class="lbnav"><button id="lbprev" aria-label="Previous">&#8249;</button><span id="lbn" style="align-self:center;padding:0 8px"></span><button id="lbnext" aria-label="Next">&#8250;</button><button id="lbx" aria-label="Close">&#10005;</button></span></div></div></div>
+<script>
+(function(){
+  var me = (window.CITIZENS || []).filter(function(c){ return c.id === 'barrelo'; })[0] || {}, S = window.SITE || {};
+  var CA = (me.ca || 'SOON').trim(), HAS = CA !== 'SOON' && CA !== '', CITY = (S.CA || 'SOON').trim(), CHAS = CITY !== 'SOON' && CITY !== '';
+  var pons = HAS ? window.PONS_HOME + '/' + CA : (CHAS ? window.PONS_HOME + '/' + CITY : window.PONS_HOME);
+  var dex = HAS ? window.DEX_HOME + '/' + CA : (CHAS ? window.DEX_HOME + '/' + CITY : window.DEX_HOME);
+  var x = me.x || S.X_URL || 'https://x.com';
+  ['buy','buy2'].forEach(function(i){ var a = document.getElementById(i); a.href = pons; a.target = '_blank'; a.rel = 'noopener'; });
+  ['xl','xl2'].forEach(function(i){ var a = document.getElementById(i); a.href = x; a.target = '_blank'; a.rel = 'noopener'; });
+  var d = document.getElementById('dex'); d.href = dex; d.target = '_blank'; d.rel = 'noopener';
+  var ca = document.getElementById('ca'), cp = document.getElementById('cp'); ca.textContent = HAS ? CA : 'soon';
+  document.getElementById('idc').addEventListener('click', function(){ var old = cp.textContent; if(HAS){ if(navigator.clipboard) navigator.clipboard.writeText(CA); cp.textContent = 'Copied'; } else cp.textContent = 'Not issued yet'; setTimeout(function(){ cp.textContent = old; }, 1300); });
+  var CAPS = ["Among the tanks at the docks", "At the pump, filling nothing", "In the truck stop diner, coffee black", "The tanks, from the other side", "Rain on the oil, rainbow on the puddle", "Shift over, still there"], grid = document.getElementById('grid'), lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'), lbcap = document.getElementById('lbcap'), lbn = document.getElementById('lbn'), gi = 0;
+  function show(k){ gi = (k + CAPS.length) % CAPS.length; lbimg.src = '../assets/barrelo/' + (gi + 1) + '.webp'; lbimg.alt = 'Barrelo ' + CAPS[gi].toLowerCase(); lbcap.textContent = CAPS[gi]; lbn.textContent = (gi + 1) + ' / ' + CAPS.length; lb.classList.add('on'); }
+  grid.addEventListener('click', function(e){ var b = e.target.closest('button'); if(b) show(+b.dataset.i); });
+  document.getElementById('lbprev').addEventListener('click', function(){ show(gi - 1); });
+  document.getElementById('lbnext').addEventListener('click', function(){ show(gi + 1); });
+  document.getElementById('lbx').addEventListener('click', function(){ lb.classList.remove('on'); });
+  lb.addEventListener('click', function(e){ if(e.target === lb) lb.classList.remove('on'); });
+  document.addEventListener('keydown', function(e){ if(!lb.classList.contains('on')) return; if(e.key === 'Escape') lb.classList.remove('on'); if(e.key === 'ArrowLeft') show(gi - 1); if(e.key === 'ArrowRight') show(gi + 1); });
+})();
+</script>
+</body>
+</html>
