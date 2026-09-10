@@ -115,6 +115,8 @@ h1 i{font-style:normal;color:var(--hot)}
 .cin h3 small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--hot);margin-top:6px;font-weight:400}
 .cin p{margin-top:8px;color:rgba(232,230,223,.85);max-width:52ch}
 .cin p b{color:var(--paper)}
+.cin .visit{display:inline-block;margin-top:10px;font-family:var(--disp);font-weight:700;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--neon);border-bottom:1px solid rgba(127,224,255,.4)}
+.cin .visit:hover{color:var(--paper)}
 .cnav{display:flex;gap:6px}
 .cnav button{width:38px;height:34px;border:1px solid rgba(232,230,223,.45);font-family:var(--disp);font-size:18px;line-height:1}
 .cnav button:hover{background:rgba(232,230,223,.12)}
@@ -220,7 +222,7 @@ h1 i{font-style:normal;color:var(--hot)}
     <div class="shot"><img id="cshot" src="" alt="" /><div class="tag" id="ctag"></div></div>
     <div class="body">
       <img id="cpor" src="" alt="" />
-      <div><h3 id="cname"></h3><p id="cline"></p></div>
+      <div><h3 id="cname"></h3><p id="cline"></p><a class="visit" id="cvisit" href="#" target="_blank" rel="noopener" hidden>Visit his place &#8599;</a></div>
       <div class="cnav"><button id="cprev" aria-label="Previous">&#8249;</button><button id="cnext" aria-label="Next">&#8250;</button><button id="cx" aria-label="Close">&#10005;</button></div>
     </div>
   </div>
@@ -248,7 +250,7 @@ h1 i{font-style:normal;color:var(--hot)}
 
   /* the citizens: name, district, head, where they were seen, what they would say */
   var C = [
-    ['tesloon',  'Tesloon',  'Motor District', .50, .64, 'Seen at the charger on level minus two', 'He is the car. <b>The car is late.</b>'],
+    ['tesloon',  'Tesloon',  'Motor District', .50, .64, 'Seen at the charger on level minus two', 'He is the car. <b>The car is late.</b>', 'https://tesloon.vercel.app'],
     ['gigachip', 'Gigachip', 'Tech Quarter',   .76, .26, 'Seen in the server room, running hot',   'Sold out everywhere. <b>Never in stock, always in demand.</b>'],
     ['iphony',   'Iphony',   'Tech Quarter',   .82, .35, 'Seen alone on the keynote stage',        'One more thing, every year. <b>It is the same thing.</b>'],
     ['bigburg',  'Bigburg',  'Fast Food Row',  .30, .44, 'Seen behind the counter after close',    'Billions served. <b>None of them him.</b>'],
@@ -384,6 +386,7 @@ h1 i{font-style:normal;color:var(--hot)}
     document.getElementById('ctag').textContent = c[2] + ' · ' + c[5];
     document.getElementById('cname').innerHTML = c[1] + '<small>' + c[2] + ' · citizen ' + (cur + 1) + ' of 12</small>';
     document.getElementById('cline').innerHTML = c[6];
+    var vis = document.getElementById('cvisit'); if(c[7]){ vis.href = c[7]; vis.hidden = false; } else vis.hidden = true;
     card.classList.add('on');
     if(!seen[cur]){ seen[cur] = 1; nSeen++; found.textContent = nSeen; pins[cur].el.classList.add('seen'); pins[cur].li.classList.add('seen'); }
   }
