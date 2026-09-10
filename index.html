@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="config.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Stocks Robinhood City</title>
+<meta name="description" content="Every stock is a citizen, every citizen has a product for a head, nobody has a face, the city runs on Robinhood Chain" />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="apple-touch-icon" href="assets/apple-icon.png" />
+<link rel="preload" as="image" href="assets/hero.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --ink:#070b12; --deep:#0b1119; --paper:#e8e6df; --neon:#7fe0ff; --hot:#ff4d3d; --sign:#1c6b3d; --dim:#6b7484; --line:rgba(232,230,223,.12);
+  --disp:"Barlow Condensed","Arial Narrow",sans-serif; --mono:"Space Mono","Courier New",monospace; --pad:clamp(16px,3vw,40px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:13px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.grain{position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.07;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* hud */
+.hud{position:fixed;z-index:40;display:flex;gap:6px;align-items:center}
+.tl{left:var(--pad);top:var(--pad)} .tr{right:var(--pad);top:var(--pad)}
+.key{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:36px;padding:0 14px;font-family:var(--disp);font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--paper);background:rgba(7,11,18,.7);border:1px solid rgba(232,230,223,.5);transition:background .15s,border-color .15s,transform .12s}
+.key:hover{border-color:var(--paper);background:rgba(232,230,223,.1);transform:translateY(-1px)}
+.key.buy{background:var(--hot);border-color:var(--hot);color:#fff}
+.key.buy:hover{background:#ff6a5c;border-color:#ff6a5c}
+.key img{width:15px;height:15px;object-fit:contain}
+.key img.av{width:22px;height:22px;border:1px solid rgba(232,230,223,.5)}
+
+/* hero: the flight in */
+.hero{position:relative;min-height:100svh;display:grid;align-items:end;overflow:hidden;background:var(--ink)}
+.hero video,.hero .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.9) contrast(1.05)}
+.hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,11,18,.35),rgba(7,11,18,0) 35%,rgba(7,11,18,.25) 65%,rgba(7,11,18,.97))}
+.wrap{position:relative;z-index:2;width:min(1240px,100%);margin:0 auto;padding:0 var(--pad)}
+.hero .wrap{padding-bottom:calc(var(--pad) + 6px)}
+.eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--neon);text-shadow:0 0 14px rgba(127,224,255,.5)}
+h1{font-family:var(--disp);font-weight:800;font-size:clamp(60px,12.5vw,196px);line-height:.84;letter-spacing:.005em;text-transform:uppercase;color:var(--paper);text-shadow:0 14px 60px rgba(0,0,0,.85);margin-top:8px}
+h1 i{font-style:normal;color:var(--hot)}
+.lede{display:flex;gap:clamp(14px,4vw,60px);align-items:flex-end;justify-content:space-between;flex-wrap:wrap;margin-top:14px}
+.lede p{max-width:52ch;font-size:13.5px;color:rgba(232,230,223,.85)}
+.lede p b{color:var(--paper)}
+.enter{font-family:var(--disp);font-weight:700;font-size:18px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper);display:inline-flex;align-items:center;gap:10px}
+.enter i{font-style:normal;display:inline-block;animation:nod 1.5s ease-in-out infinite}
+@keyframes nod{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+
+/* the sign at the city limits */
+.limits{padding:clamp(48px,8vw,110px) 0 clamp(30px,5vw,60px);display:grid;place-items:center}
+.pole{width:14px;height:64px;background:linear-gradient(90deg,#3a4250,#6a7480,#3a4250);margin-top:-2px}
+.sign{position:relative;width:min(760px,92vw);background:var(--sign);border:6px solid #fff;border-radius:14px;padding:clamp(18px,3vw,30px) clamp(20px,3.6vw,40px);box-shadow:0 30px 70px rgba(0,0,0,.6),inset 0 0 0 2px var(--sign),inset 0 0 0 4px rgba(255,255,255,.55);cursor:pointer;overflow:hidden}
+.sign:after{content:"";position:absolute;top:-60%;left:-40%;width:40%;height:220%;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.16),rgba(255,255,255,0));transform:rotate(18deg);animation:sweep 9s ease-in-out infinite}
+@keyframes sweep{0%,60%{left:-40%}100%{left:130%}}
+.sign .t{font-family:var(--disp);font-weight:800;font-size:clamp(30px,6vw,64px);line-height:.95;letter-spacing:.02em;text-transform:uppercase;color:#fff}
+.sign .r{display:flex;justify-content:space-between;gap:16px;font-family:var(--disp);font-weight:700;font-size:clamp(16px,2.6vw,26px);letter-spacing:.08em;text-transform:uppercase;color:#fff;margin-top:8px;border-top:3px solid rgba(255,255,255,.75);padding-top:8px}
+.sign .ca{margin-top:10px;font-family:var(--mono);font-size:clamp(11px,1.5vw,14px);letter-spacing:.06em;color:#fff;word-break:break-all;line-height:1.5}
+.sign .ca span{display:block;font-size:10px;letter-spacing:.3em;opacity:.8;margin-bottom:2px}
+.sign .cp{position:absolute;right:14px;bottom:10px;font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+
+/* the open world */
+.world{position:relative;height:100svh;min-height:560px;overflow:hidden;background:#05080d;touch-action:none;user-select:none;-webkit-user-select:none}
+.world canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#rain{pointer-events:none;opacity:.55;mix-blend-mode:screen}
+.layer{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.pin{position:absolute;left:0;top:0;width:64px;height:64px;margin:-32px 0 0 -32px;pointer-events:auto;cursor:pointer;transform-origin:center}
+.pin .ring{position:absolute;inset:0;border-radius:50%;border:2px solid var(--neon);box-shadow:0 0 18px rgba(127,224,255,.55),inset 0 0 12px rgba(127,224,255,.25);background:rgba(7,11,18,.7);transition:transform .2s,border-color .2s;animation:pulse 2.6s ease-in-out infinite}
+.pin img{position:absolute;inset:6px;width:52px;height:52px;object-fit:contain;filter:drop-shadow(0 4px 10px rgba(0,0,0,.8))}
+.pin b{position:absolute;left:50%;top:100%;transform:translate(-50%,6px);white-space:nowrap;font-family:var(--disp);font-weight:700;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper);text-shadow:0 2px 8px #000;opacity:0;transition:opacity .2s}
+.pin:hover .ring,.pin.seen .ring{border-color:var(--hot);box-shadow:0 0 22px rgba(255,77,61,.6)}
+.pin:hover b,.pin.seen b{opacity:1}
+.pin.seen .ring{animation:none}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.dist{position:absolute;left:0;top:0;transform:translate(-50%,-50%);white-space:nowrap;font-family:var(--disp);font-weight:800;font-size:22px;letter-spacing:.3em;text-transform:uppercase;color:rgba(232,230,223,.55);text-shadow:0 2px 10px #000;pointer-events:none}
+.dist:before{content:"";position:absolute;left:50%;top:50%;width:260px;height:120px;transform:translate(-50%,-50%);border:1px dashed rgba(127,224,255,.18);border-radius:50%}
+.wui{position:absolute;z-index:5;pointer-events:none}
+.wui > *{pointer-events:auto}
+.wtop{left:var(--pad);top:var(--pad);display:grid;gap:6px}
+.wtop .h{font-family:var(--disp);font-weight:800;font-size:clamp(22px,3.4vw,40px);letter-spacing:.06em;text-transform:uppercase;text-shadow:0 2px 12px #000}
+.wtop .h i{font-style:normal;color:var(--neon)}
+.wtop .s{font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
+.wtop .s b{color:var(--hot)}
+.wbtns{position:absolute;right:var(--pad);top:var(--pad);display:flex;gap:6px}
+.wbtns button{width:36px;height:36px;border:1px solid rgba(232,230,223,.45);background:rgba(7,11,18,.7);font-family:var(--disp);font-weight:700;font-size:20px;line-height:1}
+.wbtns button:hover{background:rgba(232,230,223,.12)}
+.list{position:absolute;right:var(--pad);bottom:var(--pad);width:230px;max-height:52%;overflow:auto;background:rgba(7,11,18,.78);border:1px solid rgba(232,230,223,.2);backdrop-filter:blur(4px)}
+.list h4{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);padding:10px 12px 6px;border-bottom:1px solid var(--line)}
+.list button{display:flex;align-items:center;gap:10px;width:100%;padding:7px 12px;text-align:left;border-bottom:1px solid var(--line);font-family:var(--disp);font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:rgba(232,230,223,.55);transition:background .15s,color .15s}
+.list button img{width:22px;height:22px;object-fit:contain}
+.list button small{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--dim)}
+.list button:hover{background:rgba(232,230,223,.08);color:var(--paper)}
+.list button.seen{color:var(--paper)} .list button.seen small{color:var(--hot)}
+.mini{position:absolute;left:var(--pad);bottom:var(--pad);width:176px;height:101px;border:1px solid rgba(232,230,223,.35);background:#000;overflow:hidden}
+.mini canvas{position:absolute;inset:0;width:100%;height:100%}
+.hint{position:absolute;left:50%;bottom:calc(var(--pad) + 8px);transform:translateX(-50%);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);background:rgba(7,11,18,.6);padding:6px 12px;border:1px solid var(--line);transition:opacity .5s;pointer-events:none}
+.hint.gone{opacity:0}
+
+/* the card: one citizen, big */
+.card{position:fixed;inset:0;z-index:60;display:none;place-items:center;padding:var(--pad);background:rgba(4,6,10,.92)}
+.card.on{display:grid}
+.cin{width:min(1080px,100%);max-height:94svh;overflow:auto;background:var(--deep);border:1px solid rgba(232,230,223,.25);box-shadow:0 40px 100px rgba(0,0,0,.7)}
+.cin .shot{position:relative;aspect-ratio:16/9;background:#000}
+.cin .shot img{width:100%;height:100%;object-fit:cover}
+.cin .shot .tag{position:absolute;left:14px;top:14px;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--neon);background:rgba(7,11,18,.7);padding:5px 9px;border:1px solid rgba(127,224,255,.4)}
+.cin .body{display:grid;grid-template-columns:120px 1fr auto;gap:18px;align-items:center;padding:16px 18px}
+.cin .body img{width:120px;height:120px;object-fit:cover;border:1px solid rgba(232,230,223,.3)}
+.cin h3{font-family:var(--disp);font-weight:800;font-size:clamp(30px,4.6vw,54px);line-height:.9;letter-spacing:.03em;text-transform:uppercase}
+.cin h3 small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--hot);margin-top:6px;font-weight:400}
+.cin p{margin-top:8px;color:rgba(232,230,223,.85);max-width:52ch}
+.cin p b{color:var(--paper)}
+.cnav{display:flex;gap:6px}
+.cnav button{width:38px;height:34px;border:1px solid rgba(232,230,223,.45);font-family:var(--disp);font-size:18px;line-height:1}
+.cnav button:hover{background:rgba(232,230,223,.12)}
+
+/* citizens */
+.cit{padding:clamp(56px,9vw,120px) 0 clamp(40px,6vw,80px)}
+.head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.head h2{font-family:var(--disp);font-weight:800;font-size:clamp(34px,6vw,84px);line-height:.9;letter-spacing:.02em;text-transform:uppercase}
+.head span{font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim)}
+.walk{position:relative;aspect-ratio:16/9;background:#000;border:1px solid var(--line);overflow:hidden;margin-bottom:10px}
+.walk video,.walk img{width:100%;height:100%;object-fit:cover}
+.walk .cap{position:absolute;left:14px;bottom:12px;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(232,230,223,.8);text-shadow:0 2px 8px #000}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.grid button{position:relative;display:block;padding:0;overflow:hidden;background:#0b0d10;border:1px solid rgba(232,230,223,.16);text-align:left}
+.grid img{width:100%;aspect-ratio:1;object-fit:cover;filter:saturate(.85) brightness(.88);transition:transform .5s cubic-bezier(.2,.8,.24,1),filter .3s}
+.grid button:hover img{transform:scale(1.06);filter:none}
+.grid b{position:absolute;left:0;right:0;bottom:0;padding:26px 10px 8px;font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper);background:linear-gradient(180deg,rgba(7,11,18,0),rgba(7,11,18,.95))}
+.grid b small{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.22em;color:var(--neon);font-weight:400}
+
+.end{border-top:1px solid var(--line);padding:clamp(26px,4vw,46px) 0 calc(var(--pad) + 10px);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#4d5563}
+.end .acts{display:flex;gap:8px}
+
+@media (max-width:900px){
+  .grid{grid-template-columns:repeat(3,1fr)}
+  .cin .body{grid-template-columns:80px 1fr;gap:12px}
+  .cin .body img{width:80px;height:80px}
+  .cnav{grid-column:1/-1}
+  .wtop{top:calc(var(--pad) + 46px)}
+  .list{width:auto;left:var(--pad);right:var(--pad);bottom:calc(var(--pad) + 88px);max-height:none;display:flex;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+  .list h4{display:none}
+  .list button{flex:0 0 auto;width:auto;border:0;border-right:1px solid var(--line);padding:8px 12px;font-size:13px}
+  .list button small{display:none}
+  .mini{width:120px;height:69px}
+  .wbtns{top:auto;bottom:var(--pad);right:var(--pad)}
+  .hint{bottom:calc(var(--pad) + 140px)}
+  .dist{font-size:16px} .dist:before{width:180px;height:80px}
+  .tl span,.tr .key.buy span{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition-duration:.01ms !important}}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<a class="hud tl key" href="./"><img class="av" src="assets/avatar.webp" alt="" /><span data-ticker>$SRC</span></a>
+<nav class="hud tr">
+  <a class="key buy" data-link="pons" href="https://www.ponsfamily.com/launchpad"><span>Buy</span><img src="assets/pons-mark.png" alt="" /></a>
+  <a class="key" data-link="x" href="https://x.com" aria-label="X"><img src="assets/ic-x.svg" alt="X" /></a>
+</nav>
+
+<header class="hero">
+  <img class="poster" src="assets/hero.jpg" alt="" />
+  <video id="heroV" src="assets/hero.mp4" poster="assets/hero.jpg" muted loop playsinline autoplay preload="auto"></video>
+  <div class="veil"></div>
+  <div class="wrap">
+    <div class="eyebrow">Robinhood Chain &#183; population 12 &#183; nobody has a face</div>
+    <h1>Stocks<br />Robinhood <i>City</i></h1>
+    <div class="lede">
+      <p>Every stock is a citizen here. Every citizen has a product for a head. They charge, they queue, they clock in, they never look up. <b>The city runs on Robinhood Chain and it never closes.</b></p>
+      <a class="enter" href="#world">Enter the city <i>&#8595;</i></a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="limits">
+    <div class="sign" id="sign" title="Copy contract">
+      <div class="t" data-name>Stocks Robinhood City</div>
+      <div class="r"><span>Pop. 12</span><span>Elev. all time high</span><span data-ticker>$SRC</span></div>
+      <div class="ca"><span>Contract &#183; Robinhood Chain &#183; Pons</span><b id="ca">soon</b></div>
+      <div class="cp" id="cp">Tap to copy</div>
+    </div>
+    <div class="pole"></div>
+  </section>
+
+  <section class="world" id="world">
+    <canvas id="map"></canvas>
+    <canvas id="rain"></canvas>
+    <div class="layer" id="labels"></div>
+    <div class="layer" id="pins"></div>
+    <div class="wui wtop"><div class="h">Open <i>world</i></div><div class="s">Drag to explore &#183; scroll to zoom &#183; <b id="found">0</b> / 12 citizens found</div></div>
+    <div class="wui wbtns"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">&#8722;</button><button id="zfit" aria-label="Fit">&#8981;</button></div>
+    <div class="wui list" id="list"><h4>Citizens</h4></div>
+    <div class="wui mini"><canvas id="mini"></canvas></div>
+    <div class="wui hint" id="hint">Drag the city</div>
+  </section>
+
+  <section class="cit wrap">
+    <div class="head"><h2>The citizens</h2><span>Twelve of them &#183; same rain &#183; different heads</span></div>
+    <div class="walk"><video id="walkV" src="assets/crowd.mp4" poster="assets/crowd.jpg" muted playsinline preload="metadata"></video><div class="cap">Shift change on Main Street</div></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <div class="end wrap">
+    <span data-name>Stocks Robinhood City</span>
+    <span class="acts"><a class="key buy" data-link="pons" href="https://www.ponsfamily.com/launchpad">Buy on Pons<img src="assets/pons-mark.png" alt="" /></a><a class="key" data-link="dex" href="https://dexscreener.com/robinhood">Chart<img src="assets/ic-dex.svg" alt="" /></a><a class="key" data-link="x" href="https://x.com">X<img src="assets/ic-x.svg" alt="" /></a></span>
+    <span>Not financial advice, the city would know</span>
+  </div>
+</main>
+
+<div class="card" id="card">
+  <div class="cin">
+    <div class="shot"><img id="cshot" src="" alt="" /><div class="tag" id="ctag"></div></div>
+    <div class="body">
+      <img id="cpor" src="" alt="" />
+      <div><h3 id="cname"></h3><p id="cline"></p></div>
+      <div class="cnav"><button id="cprev" aria-label="Previous">&#8249;</button><button id="cnext" aria-label="Next">&#8250;</button><button id="cx" aria-label="Close">&#10005;</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var S = window.SITE, CA = (S.CA || "SOON").trim(), HAS = CA !== "SOON" && CA !== "";
+  document.querySelectorAll('[data-name]').forEach(function(e){ e.textContent = S.NAME; });
+  document.querySelectorAll('[data-ticker]').forEach(function(e){ e.textContent = S.TICKER; });
+  document.title = S.NAME;
+  document.querySelectorAll('[data-link="pons"]').forEach(function(a){ a.href = HAS ? window.PONS_HOME + '/' + CA : window.PONS_HOME; a.target = '_blank'; a.rel = 'noopener'; });
+  document.querySelectorAll('[data-link="dex"]').forEach(function(a){ a.href = HAS ? window.DEX_HOME + '/' + CA : window.DEX_HOME; a.target = '_blank'; a.rel = 'noopener'; });
+  document.querySelectorAll('[data-link="x"]').forEach(function(a){ a.href = S.X_URL || 'https://x.com'; a.target = '_blank'; a.rel = 'noopener'; });
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* the contract is painted on the sign at the city limits */
+  var ca = document.getElementById('ca'), cp = document.getElementById('cp');
+  ca.textContent = HAS ? CA : 'soon';
+  document.getElementById('sign').addEventListener('click', function(){
+    var old = cp.textContent;
+    if(HAS){ if(navigator.clipboard) navigator.clipboard.writeText(CA); cp.textContent = 'Copied'; } else cp.textContent = 'Not painted yet';
+    setTimeout(function(){ cp.textContent = old; }, 1300);
+  });
+
+  /* the citizens: name, district, head, where they were seen, what they would say */
+  var C = [
+    ['tesloon',  'Tesloon',  'Motor District', .50, .64, 'Seen at the charger on level minus two', 'He is the car. <b>The car is late.</b>'],
+    ['gigachip', 'Gigachip', 'Tech Quarter',   .76, .26, 'Seen in the server room, running hot',   'Sold out everywhere. <b>Never in stock, always in demand.</b>'],
+    ['iphony',   'Iphony',   'Tech Quarter',   .82, .35, 'Seen alone on the keynote stage',        'One more thing, every year. <b>It is the same thing.</b>'],
+    ['bigburg',  'Bigburg',  'Fast Food Row',  .30, .44, 'Seen behind the counter after close',    'Billions served. <b>None of them him.</b>'],
+    ['latteo',   'Latteo',   'Fast Food Row',  .34, .51, 'Seen in the coffee shop, chairs up',      'Six dollars, no refills. <b>Still a line.</b>'],
+    ['sneako',   'Sneako',   'Sneaker Street', .22, .33, 'Seen in the store after the drop',        'Limited edition. <b>Of himself.</b>'],
+    ['colaman',  'Colaman',  'Fast Food Row',  .27, .54, 'Seen by the vending machine in the alley', 'Same recipe since day one. <b>Price went up.</b>'],
+    ['rocketo',  'Rocketo',  'Rocket Park',    .90, .80, 'Seen on the pad at T minus nothing',      'Lands the rocket. <b>Misses the estimate.</b>'],
+    ['pharmo',   'Pharmo',   'Pharma Hills',   .60, .12, 'Seen in the corridor, lights flickering', 'Side effects may include <b>a chart.</b>'],
+    ['barrelo',  'Barrelo',  'Energy Docks',   .13, .84, 'Seen among the tanks at the docks',       'Goes negative once a decade. <b>Comes back.</b>'],
+    ['coiney',   'Coiney',   'Bank Square',    .45, .30, 'Seen on the bank steps after hours',      'Too big to fail. <b>Too small to notice you.</b>'],
+    ['retailo',  'Retailo',  'Retail Mall',    .86, .56, 'Seen in aisle seven, restocking nothing', 'Everything must go. <b>Including him.</b>']
+  ];
+  var D = [['Energy Docks',.12,.87],['Sneaker Street',.22,.28],['Fast Food Row',.31,.47],['Bank Square',.46,.25],['Motor District',.50,.68],['Pharma Hills',.61,.08],['Tech Quarter',.79,.29],['Retail Mall',.86,.60],['Rocket Park',.90,.85]];
+
+  /* ---------- the open world ---------- */
+  var world = document.getElementById('world'), cv = document.getElementById('map'), ctx = cv.getContext('2d');
+  var rain = document.getElementById('rain'), rctx = rain.getContext('2d');
+  var pinsL = document.getElementById('pins'), labL = document.getElementById('labels'), mini = document.getElementById('mini'), mctx = mini.getContext('2d');
+  var found = document.getElementById('found'), list = document.getElementById('list'), hint = document.getElementById('hint');
+  var MW = 2688, MH = 1536, img = new Image(), imgS = new Image(), ready = false;
+  img.onload = function(){ ready = true; dirty = true; }; img.src = 'assets/map.webp';
+  imgS.src = 'assets/map-s.webp';
+  var vw = 0, vh = 0, dpr = 1, x = 0, y = 0, s = 1, minS = .2, maxS = 3.2, dirty = true;
+  var pins = [], seen = {}, nSeen = 0;
+
+  function resize(){
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    vw = world.clientWidth; vh = world.clientHeight;
+    cv.width = Math.floor(vw * dpr); cv.height = Math.floor(vh * dpr);
+    rain.width = Math.floor(vw * dpr / 2); rain.height = Math.floor(vh * dpr / 2);
+    mini.width = mini.clientWidth * dpr; mini.height = mini.clientHeight * dpr;
+    minS = Math.max(vw / MW, vh / MH);
+    clamp(); dirty = true;
+  }
+  function clamp(){
+    s = Math.max(minS, Math.min(maxS, s));
+    x = Math.min(0, Math.max(vw - MW * s, x));
+    y = Math.min(0, Math.max(vh - MH * s, y));
+  }
+  /* the cars: little lights that run the same roads all night */
+  var ROADS = [
+    [[.06,.72],[.18,.66],[.30,.60],[.42,.56],[.52,.55],[.62,.58],[.72,.62],[.84,.64],[.96,.66]],
+    [[.36,.98],[.40,.84],[.44,.72],[.47,.60],[.48,.48],[.47,.36],[.46,.24],[.44,.10]],
+    [[.60,.92],[.66,.80],[.72,.70],[.80,.62],[.88,.52],[.94,.40]]
+  ];
+  var cars = []; for(var i = 0; i < 26; i++) cars.push({ r:i % ROADS.length, t:Math.random(), v:(.00035 + Math.random() * .00045) * (Math.random() < .5 ? 1 : -1), c:Math.random() < .55 ? '#ffe9b0' : '#ff5a4a' });
+  function roadPt(r, t){
+    var P = ROADS[r], n = P.length - 1, f = t * n, i = Math.min(n - 1, Math.floor(f)), u = f - i;
+    return [(P[i][0] + (P[i + 1][0] - P[i][0]) * u) * MW, (P[i][1] + (P[i + 1][1] - P[i][1]) * u) * MH];
+  }
+  function draw(){
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = '#05080d'; ctx.fillRect(0, 0, vw, vh);
+    ctx.setTransform(dpr * s, 0, 0, dpr * s, dpr * x, dpr * y);
+    var src = (s * dpr < .6 && imgS.complete && imgS.naturalWidth) ? imgS : (ready ? img : (imgS.complete ? imgS : null));
+    if(src) ctx.drawImage(src, 0, 0, MW, MH);
+    /* headlights */
+    for(var i = 0; i < cars.length; i++){
+      var c = cars[i]; c.t += c.v; if(c.t > 1) c.t -= 1; if(c.t < 0) c.t += 1;
+      var p = roadPt(c.r, c.t); ctx.fillStyle = c.c; ctx.globalAlpha = .9;
+      ctx.beginPath(); ctx.arc(p[0], p[1], 2.2 / Math.sqrt(s), 0, 7); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    /* pins and district labels ride on top in DOM */
+    for(var k = 0; k < pins.length; k++){ var q = pins[k]; q.el.style.transform = 'translate(' + (q.fx * MW * s + x) + 'px,' + (q.fy * MH * s + y) + 'px) scale(' + Math.max(.7, Math.min(1.15, .55 + s * .5)) + ')'; }
+    for(var d = 0; d < labs.length; d++){ var L = labs[d]; L.el.style.transform = 'translate(' + (L.fx * MW * s + x) + 'px,' + (L.fy * MH * s + y) + 'px) translate(-50%,-50%) scale(' + Math.max(.6, Math.min(1.4, s)) + ')'; L.el.style.opacity = s < .55 ? .35 : .75; }
+    /* minimap */
+    var mw = mini.width, mh = mini.height;
+    mctx.setTransform(1, 0, 0, 1, 0, 0); mctx.fillStyle = '#000'; mctx.fillRect(0, 0, mw, mh);
+    if(imgS.complete && imgS.naturalWidth) mctx.drawImage(imgS, 0, 0, mw, mh);
+    mctx.strokeStyle = '#ff4d3d'; mctx.lineWidth = 2;
+    mctx.strokeRect(-x / s / MW * mw, -y / s / MH * mh, vw / s / MW * mw, vh / s / MH * mh);
+  }
+  /* rain over the city, always */
+  var drops = []; for(var r = 0; r < 140; r++) drops.push({ x:Math.random(), y:Math.random(), l:.02 + Math.random() * .03, v:.006 + Math.random() * .008 });
+  function rainStep(){
+    var w = rain.width, h = rain.height; rctx.clearRect(0, 0, w, h);
+    rctx.strokeStyle = 'rgba(190,220,255,.35)'; rctx.lineWidth = 1; rctx.beginPath();
+    for(var i = 0; i < drops.length; i++){ var d = drops[i]; d.y += d.v; if(d.y > 1){ d.y = -.05; d.x = Math.random(); }
+      rctx.moveTo(d.x * w, d.y * h); rctx.lineTo(d.x * w - 3, (d.y + d.l) * h); }
+    rctx.stroke();
+  }
+  /* the camera: a flight to somewhere, eased */
+  var fly = null;
+  function flyTo(fx, fy, ts, ms){
+    var tx = vw / 2 - fx * MW * ts, ty = vh / 2 - fy * MH * ts;
+    fly = { x0:x, y0:y, s0:s, x1:tx, y1:ty, s1:ts, t0:performance.now(), ms:ms || 1100 };
+  }
+  function step(now){
+    if(fly){
+      var p = Math.min(1, (now - fly.t0) / fly.ms), e = p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+      s = fly.s0 + (fly.s1 - fly.s0) * e; x = fly.x0 + (fly.x1 - fly.x0) * e; y = fly.y0 + (fly.y1 - fly.y0) * e;
+      clamp(); dirty = true; if(p >= 1) fly = null;
+    } else if(Math.abs(vx) > .02 || Math.abs(vy) > .02){ x += vx; y += vy; vx *= .92; vy *= .92; clamp(); dirty = true; }
+    if(inView){ draw(); rainStep(); }
+    requestAnimationFrame(step);
+  }
+  /* pointer: drag, fling, pinch, wheel */
+  var pts = {}, last = null, vx = 0, vy = 0, pinch = null, moved = 0;
+  world.addEventListener('pointerdown', function(e){ if(e.target.closest('.wui') || e.target.closest('.pin')) return; world.setPointerCapture(e.pointerId); pts[e.pointerId] = [e.clientX, e.clientY]; var k = Object.keys(pts); if(k.length === 1){ last = [e.clientX, e.clientY]; vx = vy = 0; fly = null; moved = 0; } else if(k.length === 2){ pinch = pinchState(); } });
+  world.addEventListener('pointermove', function(e){ if(!(e.pointerId in pts)) return; pts[e.pointerId] = [e.clientX, e.clientY]; var k = Object.keys(pts);
+    if(k.length === 1 && last){ var dx = e.clientX - last[0], dy = e.clientY - last[1]; x += dx; y += dy; vx = dx; vy = dy; last = [e.clientX, e.clientY]; moved += Math.abs(dx) + Math.abs(dy); clamp(); dirty = true; if(moved > 30) hint.classList.add('gone'); }
+    else if(k.length === 2 && pinch){ var ps = pinchState(); var f = ps.d / pinch.d; zoomAt(pinch.s * f, ps.cx, ps.cy, true); x += ps.cx - pinch.cx; y += ps.cy - pinch.cy; pinch.cx = ps.cx; pinch.cy = ps.cy; clamp(); dirty = true; } });
+  function up(e){ delete pts[e.pointerId]; if(Object.keys(pts).length < 2) pinch = null; if(!Object.keys(pts).length) last = null; }
+  world.addEventListener('pointerup', up); world.addEventListener('pointercancel', up);
+  function pinchState(){ var k = Object.keys(pts), a = pts[k[0]], b = pts[k[1]]; var rect = world.getBoundingClientRect(); return { d:Math.hypot(a[0] - b[0], a[1] - b[1]), cx:(a[0] + b[0]) / 2 - rect.left, cy:(a[1] + b[1]) / 2 - rect.top, s:s }; }
+  function zoomAt(ns, cx, cy, abs){ ns = Math.max(minS, Math.min(maxS, ns)); var f = ns / s; x = cx - (cx - x) * f; y = cy - (cy - y) * f; s = ns; clamp(); dirty = true; }
+  world.addEventListener('wheel', function(e){ e.preventDefault(); var rect = world.getBoundingClientRect(); fly = null; zoomAt(s * (e.deltaY < 0 ? 1.12 : .89), e.clientX - rect.left, e.clientY - rect.top); hint.classList.add('gone'); }, { passive:false });
+  document.getElementById('zin').addEventListener('click', function(){ zoomAt(s * 1.3, vw / 2, vh / 2); });
+  document.getElementById('zout').addEventListener('click', function(){ zoomAt(s / 1.3, vw / 2, vh / 2); });
+  document.getElementById('zfit').addEventListener('click', function(){ flyTo(.5, .5, minS, 900); });
+  world.addEventListener('keydown', function(e){ var k = 40; if(e.key === 'ArrowLeft') x += k; if(e.key === 'ArrowRight') x -= k; if(e.key === 'ArrowUp') y += k; if(e.key === 'ArrowDown') y -= k; if(e.key === '+' || e.key === '=') zoomAt(s * 1.2, vw / 2, vh / 2); if(e.key === '-') zoomAt(s / 1.2, vw / 2, vh / 2); clamp(); dirty = true; });
+  world.tabIndex = 0;
+
+  /* pins, labels, list */
+  var labs = D.map(function(d){ var el = document.createElement('div'); el.className = 'dist'; el.textContent = d[0]; labL.appendChild(el); return { el:el, fx:d[1], fy:d[2] }; });
+  C.forEach(function(c, i){
+    var el = document.createElement('button'); el.className = 'pin'; el.setAttribute('aria-label', c[1] + ', ' + c[2]);
+    el.innerHTML = '<span class="ring"></span><img src="assets/h-' + c[0] + '.webp" alt="" /><b>' + c[1] + '</b>';
+    el.addEventListener('click', function(){ open(i); });
+    pinsL.appendChild(el); pins.push({ el:el, fx:c[3], fy:c[4] });
+    var li = document.createElement('button'); li.innerHTML = '<img src="assets/h-' + c[0] + '.webp" alt="" />' + c[1] + '<small>' + c[2].split(' ')[0] + '</small>';
+    li.addEventListener('click', function(){ flyTo(c[3], c[4], Math.max(1.1, s), 1200); setTimeout(function(){ open(i); }, 1250); });
+    list.appendChild(li); pins[i].li = li;
+  });
+
+  /* the card */
+  var card = document.getElementById('card'), cur = 0;
+  function open(i){
+    cur = (i + C.length) % C.length; var c = C[cur];
+    document.getElementById('cshot').src = 'assets/s-' + c[0] + '.webp'; document.getElementById('cshot').alt = c[1] + ' at ' + c[2];
+    document.getElementById('cpor').src = 'assets/p-' + c[0] + '.webp';
+    document.getElementById('ctag').textContent = c[2] + ' · ' + c[5];
+    document.getElementById('cname').innerHTML = c[1] + '<small>' + c[2] + ' · citizen ' + (cur + 1) + ' of 12</small>';
+    document.getElementById('cline').innerHTML = c[6];
+    card.classList.add('on');
+    if(!seen[cur]){ seen[cur] = 1; nSeen++; found.textContent = nSeen; pins[cur].el.classList.add('seen'); pins[cur].li.classList.add('seen'); }
+  }
+  document.getElementById('cprev').addEventListener('click', function(){ open(cur - 1); });
+  document.getElementById('cnext').addEventListener('click', function(){ open(cur + 1); });
+  document.getElementById('cx').addEventListener('click', function(){ card.classList.remove('on'); });
+  card.addEventListener('click', function(e){ if(e.target === card) card.classList.remove('on'); });
+  document.addEventListener('keydown', function(e){ if(!card.classList.contains('on')) return; if(e.key === 'Escape') card.classList.remove('on'); if(e.key === 'ArrowLeft') open(cur - 1); if(e.key === 'ArrowRight') open(cur + 1); });
+
+  /* the grid below */
+  var grid = document.getElementById('grid');
+  grid.innerHTML = C.map(function(c, i){ return '<button data-i="' + i + '"><img src="assets/p-' + c[0] + '.webp" alt="' + c[1] + '" loading="lazy" /><b>' + c[1] + '<small>' + c[2] + '</small></b></button>'; }).join('');
+  grid.addEventListener('click', function(e){ var b = e.target.closest('button'); if(b) open(+b.dataset.i); });
+
+  /* the world only draws while it is on screen; on arrival the camera flies in once */
+  var inView = false, arrived = false;
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){ inView = es[0].isIntersecting; if(inView && !arrived){ arrived = true; if(!reduce){ s = minS; x = vw / 2 - .5 * MW * s; y = vh / 2 - .45 * MH * s; clamp(); flyTo(.46, .34, Math.max(minS * 1.9, .9), 2600); } } }, { threshold:.2 }).observe(world);
+    var wv = document.getElementById('walkV');
+    new IntersectionObserver(function(es){ if(es[0].isIntersecting){ wv.play().catch(function(){}); } }, { threshold:.4 }).observe(wv);
+    wv.addEventListener('ended', function(){ wv.pause(); });
+  } else { inView = true; }
+  addEventListener('resize', resize);
+  resize(); s = minS; x = vw / 2 - .5 * MW * s; y = vh / 2 - .45 * MH * s; clamp();
+  requestAnimationFrame(step);
+})();
+</script>
+</body>
+</html>
